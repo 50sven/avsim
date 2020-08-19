@@ -7,6 +7,9 @@
 #include "../geom/Geometry.hpp"
 #include "../geom/Math.hpp"
 
+#include <string>
+
+
 namespace avs {
 namespace entity {
 

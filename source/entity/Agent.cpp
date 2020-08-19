@@ -9,7 +9,7 @@ namespace entity {
     // ==================================================
 
     Agent::Agent(const geom::Transform &transform) : 
-        Entity(counter++, transform) {}
+        Entity("A" + std::to_string(counter++), transform) {}
 
     // ==================================================
     //  MEMBER VARIABLES
@@ -75,7 +75,7 @@ namespace entity {
 
     std::ostream &operator<<(std::ostream &out, const Agent &agent)
     {
-        out << "Agent(id=" << agent.id << ", x="<< agent.location.x << ", y=" << agent.location.y << ", yaw=" << agent.rotation << ")";
+        out << "Agent(id=" << agent.get_id() << ", x="<< agent.location.x << ", y=" << agent.location.y << ", yaw=" << agent.rotation << ")";
         return out;
     }
 

@@ -9,7 +9,7 @@ namespace entity {
     // ==================================================
 
     Obstacle::Obstacle(const geom::Transform &transform) : 
-        Entity(counter++, transform) {}
+        Entity("O" + std::to_string(counter++), transform) {}
 
     // ==================================================
     //  MEMBER VARIABLES
@@ -29,7 +29,7 @@ namespace entity {
     
     std::ostream &operator<<(std::ostream &out, const Obstacle &Obstacle)
     {
-        out << "Obstacle(id=" << Obstacle.id << ", x="<< Obstacle.location.x << ", y=" << Obstacle.location.y << ", yaw=" << Obstacle.rotation << ")";
+        out << "Obstacle(id=" << Obstacle.get_id() << ", x="<< Obstacle.location.x << ", y=" << Obstacle.location.y << ", yaw=" << Obstacle.rotation << ")";
         return out;
     }
 

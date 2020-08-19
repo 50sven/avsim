@@ -6,6 +6,8 @@
 #include "../geom/Geometry.hpp"
 #include "../geom/Math.hpp"
 
+#include <string>
+
 
 namespace avs {
 namespace entity {
@@ -13,6 +15,7 @@ namespace entity {
 class Entity
 {
 protected:
+    const std::string id = "NO_ID";
     const geom::Vector2D size = {4.0f, 2.0f};
     geom::Vector2D location;
     float rotation;
@@ -26,18 +29,20 @@ public:
     // ==================================================
 
     Entity() = default;
-    Entity(const float &entity_id, const geom::Transform &transform);
+    Entity(const std::string &entity_id, const geom::Transform &transform);
 
     // ==================================================
     //  MEMBER VARIABLES
     // ==================================================
     
-    const unsigned int id = 0;
+
 
     // ==================================================
     //  METHODS
     // ==================================================
     
+    std::string get_id() const;
+
     geom::Vector2D get_location() const;
 
     geom::Transform get_transform() const;

@@ -8,7 +8,7 @@ namespace entity {
     //  CONSTRUCTORS
     // ==================================================
 
-    Entity::Entity(const float &entity_id, const geom::Transform &transform) : 
+    Entity::Entity(const std::string &entity_id, const geom::Transform &transform) : 
         id(entity_id),
         location(transform.location),
         rotation(transform.rotation),
@@ -24,6 +24,11 @@ namespace entity {
     // ==================================================
     //  METHODS
     // ==================================================
+
+    std::string Entity::get_id() const
+    {
+        return id;
+    }
     
     geom::Vector2D Entity::get_location() const
     {
@@ -52,7 +57,7 @@ namespace entity {
 
     bool Entity::operator==(const Entity &other_entity) const
     {
-        return (id == other_entity.id);
+        return (id == other_entity.get_id());
     }
 
     bool Entity::operator!=(const Entity &other_entity) const
