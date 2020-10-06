@@ -1,5 +1,6 @@
 #include "Geom.cpp"
 #include "Entity.cpp"
+#include "Road.cpp"
 
 BOOST_PYTHON_MODULE(avsimpy)
 {   
@@ -10,4 +11,5 @@ BOOST_PYTHON_MODULE(avsimpy)
     package.attr("__path__") = "avsimpy";
     export_geom();
     export_entity();
+    export_road();
 }

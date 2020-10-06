@@ -24,13 +24,12 @@ echo "============================================"
 echo "Start building process"
 echo "============================================"
 
-if [ -d "./build" ]
+if [ ! -d "./build" ]
 then
-    rm -rf build
-    echo "Remove and recreate build directory"
+    mkdir build
 fi
 
-mkdir build && cd build
+cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE -D BUILD_PYTHON=${BUILD_PYTHON} ..
 make
 

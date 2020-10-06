@@ -13,9 +13,11 @@ message(STATUS "Build python api: ${BUILD_PYTHON}")
 set(libavs_source_path "${PROJECT_SOURCE_DIR}/source")
 include_directories(${libavs_source_path})
 
-# Build library
+# Add third party libraries
+add_subdirectory(third-party)
+# Build avsim library
 add_subdirectory(source)
-# Build main
+# Build main executable
 add_subdirectory(bin)
 # Build python package
 if(BUILD_PYTHON)

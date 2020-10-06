@@ -17,7 +17,7 @@ class Agent : public Entity
 {
 private:
     static unsigned int counter;
-    const float speed_limit = 30.0;
+    const float speed_limit = 15.0;
 
     geom::Vector2D velocity;
     geom::Vector2D acceleration;

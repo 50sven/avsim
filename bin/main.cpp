@@ -4,10 +4,15 @@
 #include "geom/CollisionCheck.hpp"
 #include "entity/Agent.hpp"
 #include "entity/Obstacle.hpp"
+#include "road/Lane.hpp"
+#include "road/Road.hpp"
+#include "yaml-cpp/yaml.h"
 
+#include <filesystem>
 #include <iostream>
 #include <random>
 #include <chrono>
+#include "string.h"
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -113,6 +118,22 @@ int main(int argc, char const *argv[])
     std::cout << geometry.front_right << std::endl;
     std::cout << geometry.back_left << std::endl;
     std::cout << geometry.front_right << std::endl;
+
+    std::cout << std::endl << "Road!" << std::endl << std::endl;
+
+    road::Lane lane(1, 3.5f, 100.0f, geom::Vector2D(0, 1.75));
+    std::cout << lane << std::endl;
+    road::Shoulder shoulder(1, 0.3f, 100.0f, geom::Vector2D(0, 3.65));
+    std::cout << shoulder << std::endl;
+
+    std::filesystem::path cwd = std::filesystem::current_path();
+    std::string config_file = cwd.string() + "/data/test.yaml";
+    road::Road road(config_file);
+
+    for (auto const &lane : road.get_lanes())
+    {
+        std::cout << lane << std::endl;
+    }
 
     return 0;
 }

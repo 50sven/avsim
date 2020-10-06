@@ -21,6 +21,12 @@ public:
         return rad * (180.0 / M_PI);
     }
 
+    template <typename T>
+    static constexpr int sign(T val)
+    {
+        return (T(0) < val) - (val < T(0));
+    }
+
     static float dot_product(const Vector2D &vector_A, const Vector2D &vector_B)
     {
         return (vector_A.x * vector_B.x + vector_A.y * vector_B.y);  
