@@ -1,7 +1,4 @@
-# Find header/source files
-# file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.hpp")
-# file(GLOB SOURCE_LIST CONFIGURE_DEPENDS "*.cpp")
-
+# Collect all sources
 file(GLOB libavs_avs_entity_sources
     "${libavs_source_path}/entity/*.cpp"
     "${libavs_source_path}/entity/*.hpp")
@@ -16,6 +13,11 @@ file(GLOB libavs_avs_road_sources
     "${libavs_source_path}/road/*.cpp"
     "${libavs_source_path}/road/*.hpp")
 set(libavs_sources "${libavs_sources};${libavs_avs_road_sources}")
+
+file(GLOB libavs_avs_world_sources
+    "${libavs_source_path}/world/*.cpp"
+    "${libavs_source_path}/world/*.hpp")
+set(libavs_sources "${libavs_sources};${libavs_avs_world_sources}")
 
 # Create shared library and include headers
 add_library(avsim SHARED ${libavs_sources})

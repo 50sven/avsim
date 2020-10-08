@@ -8,14 +8,14 @@ namespace entity {
     //  CONSTRUCTORS
     // ==================================================
 
-    Obstacle::Obstacle(const geom::Transform &transform) : 
-        Entity("O" + std::to_string(counter++), transform) {}
+    Obstacle::Obstacle(const geom::Transform &transform, const geom::Vector2D &size) : 
+        Entity(counter--, transform, size) {}
 
     // ==================================================
     //  MEMBER VARIABLES
     // ==================================================
 
-    unsigned int Obstacle::counter = 0;
+    
     
     // ==================================================
     //  METHODS
@@ -27,9 +27,14 @@ namespace entity {
     //  OPERATORS
     // ==================================================
     
-    std::ostream &operator<<(std::ostream &out, const Obstacle &Obstacle)
+    std::ostream &operator<<(std::ostream &out, const Obstacle &obstacle)
     {
-        out << "Obstacle(id=" << Obstacle.get_id() << ", x="<< Obstacle.location.x << ", y=" << Obstacle.location.y << ", yaw=" << Obstacle.rotation << ")";
+        out << "Obstacle(id=" << obstacle.get_id()
+            << ", x="<< obstacle.get_transform().location.x
+            << ", y=" << obstacle.get_transform().location.y
+            << ", yaw=" << obstacle.get_transform().rotation
+            << ", size=" << obstacle.get_size()
+            << ")";
         return out;
     }
 

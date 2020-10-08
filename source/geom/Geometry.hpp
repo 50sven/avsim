@@ -58,8 +58,10 @@ struct Rectangle
     //  METHODS
     // ==================================================
 
-    void move_and_rotate(const Vector2D &new_location, const float &new_deg)
+    void move_and_rotate(const geom::Transform &new_transform)
     {
+        geom::Vector2D new_location = new_transform.location;
+        float new_deg = new_transform.rotation;
         geom::Vector2D translation_vector = new_location - center;
         float rotation_angle = new_deg - rotation;
 

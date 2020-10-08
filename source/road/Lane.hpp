@@ -9,7 +9,7 @@ namespace road {
 
 class Lane
 {
-private:
+protected:
     int id;
     float width;
     float length;
@@ -77,24 +77,18 @@ public:
     {
         out << std::fixed << std::setprecision(2)
             << "Lane(id=" << lane.get_id()
-            << ", start=(x=" << lane.get_center().x
-            << ", y=" << lane.get_center().y << "), "
-            << "forward(x=" << lane.get_forward_vector().x
-            << ", y=" << lane.get_forward_vector().y << "))";
+            << ", width=" <<  lane.get_width()
+            << ", length=" << lane.get_length()
+            << ", start=" << lane.get_center()
+            << ", forward=" << lane.get_forward_vector()
+            << ")";
         return out;
     }
 
 };
 
-class Shoulder
+class Shoulder : public Lane
 {
-private:
-    int id;
-    float width;
-    float length;
-    geom::Vector2D center;
-    geom::Vector2D forward_vector;
-
 public:
     // ==================================================
     //  CONSTRUCTORS
@@ -103,40 +97,7 @@ public:
     Shoulder() = default;
     Shoulder(const float &shoulder_id, const float &shoulder_width,
             const float &shoulder_length, const geom::Vector2D &center) :
-        id(shoulder_id),
-        width(shoulder_width),
-        length(shoulder_length),
-        center(center),
-        forward_vector(geom::Math::sign(shoulder_id), 0.0f) {}
-    
-    // ==================================================
-    //  METHODS
-    // ==================================================
-
-    int get_id() const
-    {
-        return id;
-    }
-
-    float get_width() const
-    {
-        return width;
-    }
-
-    float get_length() const
-    {
-        return length;
-    }
-
-    geom::Vector2D get_center() const
-    {
-        return center;
-    }
-
-    geom::Vector2D get_forward_vector() const
-    {
-        return forward_vector;
-    }
+        Lane(shoulder_id, shoulder_width, shoulder_length, center){}
     
     // ==================================================
     //  OPERATORS
@@ -156,10 +117,11 @@ public:
     {
         out << std::fixed << std::setprecision(2)
             << "Shoulder(id=" << shoulder.get_id()
-            << ", start=(x=" << shoulder.get_center().x
-            << ", y=" << shoulder.get_center().y << "), "
-            << "forward(x=" << shoulder.get_forward_vector().x
-            << ", y=" << shoulder.get_forward_vector().y << "))";
+            << ", width=" <<  shoulder.get_width()
+            << ", length=" << shoulder.get_length()
+            << ", start=" << shoulder.get_center()
+            << ", forward=" << shoulder.get_forward_vector()
+            << ")";
         return out;
     }
     

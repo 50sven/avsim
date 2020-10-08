@@ -17,7 +17,7 @@ class Obstacle : public Entity
 {
 private:
 
-    static unsigned int counter;
+    inline static int counter = -1;
 
 public:
     // ==================================================
@@ -25,7 +25,7 @@ public:
     // ==================================================
 
     Obstacle() = default;
-    Obstacle(const geom::Transform &transform);
+    Obstacle(const geom::Transform &transform, const geom::Vector2D &size);
 
     // ==================================================
     //  MEMBER VARIABLES

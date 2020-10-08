@@ -6,6 +6,7 @@
 #include "entity/Obstacle.hpp"
 #include "road/Lane.hpp"
 #include "road/Road.hpp"
+#include "world/World.hpp"
 #include "yaml-cpp/yaml.h"
 
 #include <filesystem>
@@ -61,15 +62,16 @@ int main(int argc, char const *argv[])
         float y = dist_coord(seed_generator);
         float r = dist_r(seed_generator);
         geom::Transform transform({x, y}, r);
+        geom::Vector2D size(4.0f, 2.0f);
 
         if (i <= n / 2 - 1)
         {
-            entity::Agent agent(transform);
+            entity::Agent agent(transform, size);
             my_entities.push_back(agent);
         }
         else
         {
-            entity::Obstacle obstacle(transform);
+            entity::Obstacle obstacle(transform, size);
             my_entities.push_back(obstacle);
         }
     }
@@ -92,7 +94,8 @@ int main(int argc, char const *argv[])
               << " microseconds" << std::endl << std::endl;
     
     geom::Transform transA({0.0f, 0.0f}, 0.0);
-    entity::Agent agentA(transA);
+    geom::Vector2D sizeA(4.0f, 2.0f);
+    entity::Agent agentA(transA, sizeA);
 
     geom::Rectangle geometry = agentA.get_geometry();
     std::cout << agentA << std::endl;
@@ -134,6 +137,13 @@ int main(int argc, char const *argv[])
     {
         std::cout << lane << std::endl;
     }
+
+    std::cout << std::endl << "World!" << std::endl << std::endl;
+
+    world::World world(config_file);
+
+    std::cout << std::endl << world << std::endl << std::endl;
+
 
     return 0;
 }

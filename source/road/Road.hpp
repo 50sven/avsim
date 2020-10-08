@@ -6,10 +6,11 @@
 #include "yaml-cpp/yaml.h"
 
 #include <filesystem>
-#include "string.h"
+#include <string>
 #include <vector>
 #include <array>
 #include <stdexcept>
+#include <algorithm>
 
 
 namespace avs {
@@ -32,7 +33,7 @@ public:
     // ==================================================
 
     Road() = default;
-    Road(std::string config_file)
+    Road(const std::string &config_file)
     {
         std::filesystem::path path(config_file);
         if (path.is_relative())
@@ -112,9 +113,25 @@ public:
         return lanes;
     }
 
+    Lane get_lane(const int &lane_id) const
+    {
+        auto it = std::find_if(lanes.begin(), lanes.end(), [lane_id]
+        (const Lane &lane) -> bool {return lane.get_id() == lane_id;});
+        
+        return *it;
+    }
+
     std::vector<Shoulder> get_shoulders() const
     {
         return shoulders;
+    }
+
+    Shoulder get_shoulder(const int &shoulder_id) const
+    {
+        auto it = std::find_if(shoulders.begin(), shoulders.end(), [shoulder_id]
+        (const Shoulder &shoulder) -> bool {return shoulder.get_id() == shoulder_id;});
+        
+        return *it;
     }
 
     // ==================================================
@@ -123,9 +140,17 @@ public:
 
     friend std::ostream &operator<<(std::ostream &out, const Road &road)
     {
-        out << std::fixed << std::setprecision(2)
-            << "Road(Lanes=" << road.get_lanes().size()
-            << ", Shoulders=" << road.get_shoulders().size() << ")";
+        out << std::fixed << std::setprecision(2);
+        out << "Road(";
+        for (auto &lane : road.get_lanes())
+        {
+            out << "\n   " << lane;
+        }
+        for (auto &shoulder : road.get_shoulders())
+        {
+            out << "\n   " << shoulder;
+        }
+        out << "\n)";
         return out;
     }
 };

@@ -4,7 +4,6 @@
 #include "../geom/Transform.hpp"
 #include "../geom/BoundingBox.hpp"
 #include "../geom/Geometry.hpp"
-#include "../geom/Math.hpp"
 
 #include <string>
 
@@ -15,10 +14,9 @@ namespace entity {
 class Entity
 {
 protected:
-    const std::string id = "NO_ID";
-    const geom::Vector2D size = {4.0f, 2.0f};
-    geom::Vector2D location;
-    float rotation;
+    int id;
+    geom::Transform transform;
+    geom::Vector2D size;
 
     geom::Rectangle geometry;
     geom::BoundingBox bounding_box;
@@ -29,8 +27,12 @@ public:
     // ==================================================
 
     Entity() = default;
-    Entity(const std::string &entity_id, const geom::Transform &transform);
-
+    Entity(const int &entity_id, const geom::Transform &entity_transform, const geom::Vector2D &entity_size) : 
+        id(entity_id),
+        transform(entity_transform),
+        size(entity_size),
+        geometry(entity_transform, entity_size),
+        bounding_box(geometry) {}
     // ==================================================
     //  MEMBER VARIABLES
     // ==================================================
@@ -41,23 +43,49 @@ public:
     //  METHODS
     // ==================================================
     
-    std::string get_id() const;
+    int get_id() const
+    {
+        return id;
+    }
+    
+    geom::Vector2D get_location() const
+    {
+        return transform.location;
+    }
 
-    geom::Vector2D get_location() const;
+    geom::Transform get_transform() const
+    {
+        return transform;
+    }
 
-    geom::Transform get_transform() const;
+    geom::Vector2D get_size() const
+    {
+        return size;
+    }
 
-    geom::BoundingBox get_bounding_box() const;
+    geom::BoundingBox get_bounding_box() const
+    {
+        return bounding_box;
+    }
 
-    geom::Rectangle get_geometry() const;
+    geom::Rectangle get_geometry() const
+    {   
+        return geometry;
+    }
 
     // ==================================================
     //  OPERATORS
     // ==================================================
 
-    bool operator==(const Entity &other_entity) const;
+    bool operator==(const Entity &other_entity) const
+    {
+        return (id == other_entity.get_id());
+    }
 
-    bool operator!=(const Entity &other_entity) const;
+    bool operator!=(const Entity &other_entity) const
+    {
+        return !(*this == other_entity);
+    }
 
 };
 

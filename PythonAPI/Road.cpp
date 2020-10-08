@@ -5,15 +5,6 @@
 #include <boost/python.hpp>
 
 
-#define CALL_RETURNING_LIST(cls, fn) +[](const cls &self) { \
-      boost::python::list result; \
-      for (auto &&item : self.fn()) { \
-        result.append(item); \
-      } \
-      return result; \
-    }
-
-
 void export_road()
 {
     namespace bp = boost::python;
@@ -56,7 +47,9 @@ void export_road()
         .add_property("length", &ar::Road::get_length)
         .add_property("speed_limit", &ar::Road::get_speed_limit)
         .def("get_lanes", CALL_RETURNING_LIST(ar::Road, get_lanes))
+        .def("get_lane", &ar::Road::get_lane, bp::arg("lane_id"))
         .def("get_shoulders", CALL_RETURNING_LIST(ar::Road, get_shoulders))
+        .def("get_shoulder", &ar::Road::get_shoulder, bp::arg("shoulder_id"))
         .def(bp::self_ns::str(bp::self_ns::self))
     ;
 
