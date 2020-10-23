@@ -3,10 +3,16 @@
 #include "Vector2D.hpp"
 #include "Math.hpp"
 #include "entity/Entity.hpp"
+#include "entity/Agent.hpp"
+#include "entity/Obstacle.hpp"
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
+#include <utility>
 #include <algorithm>
+
+using vector_of_pairs = std::vector<std::pair<avs::entity::Entity, avs::entity::Entity>>;
 
 
 namespace avs {
@@ -16,7 +22,7 @@ class CollisionChecker
 {
 private:
 
-    bool check_for_overlap(const Rectangle &geometry_A, const Rectangle &geometry_B, const Vector2D &axis)
+    bool is_overlapping(const Rectangle &geometry_A, const Rectangle &geometry_B, const Vector2D &axis)
     {   
         // Calculate scalar values of the (pseudo) projections
         // Pseudo: axis is not normalize since only the relative values are required for the overlap check
@@ -58,10 +64,6 @@ public:
     CollisionChecker() = default;
 
     // ==================================================
-    //  MEMBER VARIABLESstd::array<Vector2D, 4>
-
-
-    // ==================================================
     //  METHODS
     // ==================================================
 
@@ -90,13 +92,45 @@ public:
 
         for (Vector2D const &axis : projection_axis)
         {   
-            if (!check_for_overlap(geometry_A, geometry_B, axis))
+            if (!is_overlapping(geometry_A, geometry_B, axis))
             {
                 return false;
             }
         }
         
         return true;
+    }
+
+    vector_of_pairs check_collisions(const std::vector<entity::Agent> &agents, const std::vector<entity::Obstacle> &obstacles)
+    {
+        bool is_collided = false;
+        vector_of_pairs collisions;
+        for (auto it_agent_A = agents.begin(); it_agent_A < agents.end(); it_agent_A++)
+        {
+            // Check collision with other agents
+            for (auto it_agent_B = it_agent_A + 1; it_agent_B < agents.end(); it_agent_B++)
+            {
+                is_collided = check_collision(*it_agent_A, *it_agent_B);
+                if (is_collided == true)
+                {
+                    std::pair<entity::Entity, entity::Entity> collision_pair(*it_agent_A, *it_agent_B);
+                    collisions.push_back(collision_pair);
+                }
+            }
+
+            // Check collision with obstacles
+            for (auto &obstacle : obstacles)
+            {
+                is_collided = check_collision(*it_agent_A, obstacle);
+                if (is_collided == true)
+                {
+                    std::pair<entity::Entity, entity::Entity> collision_pair(*it_agent_A, obstacle);
+                    collisions.push_back(collision_pair);
+                }
+            }
+        }
+
+        return collisions;
     }
 
     // ==================================================
