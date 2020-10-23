@@ -28,11 +28,11 @@ struct BoundingBox
     BoundingBox(const Rectangle &rect) :
         center(rect.center)
         {
-            float max_x = std::max({rect.front_left.x, rect.front_right.x, rect.back_left.x, rect.back_right.x}) - center.x;
-            float max_y = std::max({rect.front_left.y, rect.front_right.y, rect.back_left.y, rect.back_right.y}) - center.y;
+            float max_x = std::max({rect.front_left.x, rect.front_right.x, rect.back_left.x, rect.back_right.x});
+            float max_y = std::max({rect.front_left.y, rect.front_right.y, rect.back_left.y, rect.back_right.y});
 
-            extent.x = max_x;
-            extent.y = max_y;
+            extent.x = max_x - center.x;
+            extent.y = max_y - center.y;
         }
     BoundingBox(const BoundingBox &other_bb) :
         center(other_bb.center),
@@ -73,12 +73,13 @@ struct BoundingBox
 
     void update(const Rectangle &rectangle)
     {
-        float max_x = std::max({rectangle.front_left.x, rectangle.front_right.x, rectangle.back_left.x, rectangle.back_right.x}) - center.x;
-        float max_y = std::max({rectangle.front_left.y, rectangle.front_right.y, rectangle.back_left.y, rectangle.back_right.y}) - center.y;
-
         center = rectangle.center;
-        extent.x = max_x;
-        extent.y = max_y;
+
+        float max_x = std::max({rectangle.front_left.x, rectangle.front_right.x, rectangle.back_left.x, rectangle.back_right.x});
+        float max_y = std::max({rectangle.front_left.y, rectangle.front_right.y, rectangle.back_left.y, rectangle.back_right.y});
+
+        extent.x = max_x - center.x;
+        extent.y = max_y - center.y;
     }
 
     // ==================================================

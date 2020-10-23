@@ -21,25 +21,24 @@ struct Rectangle
 
     Rectangle() = default;
     Rectangle(const Transform &trans, const Vector2D &size) :
-        front_left(size.x / 2.0, size.y / 2.0),
-        front_right(size.x / 2.0, -size.y / 2.0),
-        back_left(-size.x / 2.0, size.y / 2.0),
-        back_right(-size.x / 2.0, -size.y / 2.0),
+        front_left(size.x / 2.0f, size.y / 2.0f),
+        front_right(size.x / 2.0f, -size.y / 2.0f),
+        back_left(-size.x / 2.0f, size.y / 2.0f),
+        back_right(-size.x / 2.0f, -size.y / 2.0f),
+        center(trans.location),
         rotation(trans.rotation)
         {
             front_left = geom::Math::rotate_vector_on_origin(front_left, rotation) + trans.location;
             front_right = geom::Math::rotate_vector_on_origin(front_right, rotation) + trans.location;
             back_left = geom::Math::rotate_vector_on_origin(back_left, rotation) + trans.location;
             back_right = geom::Math::rotate_vector_on_origin(back_right, rotation) + trans.location;
-
-            center.x = (front_left.x + back_right.x) / 2.0f;
-            center.y = (front_left.y + back_right.y) / 2.0f;
         }
     Rectangle(const Rectangle &rect) :
         front_left(rect.front_left),
         front_right(rect.front_right),
         back_left(rect.back_left),
         back_right(rect.back_right),
+        center(rect.center),
         rotation(rect.rotation) {}
     
     // ==================================================
@@ -62,6 +61,7 @@ struct Rectangle
     {
         geom::Vector2D new_location = new_transform.location;
         float new_deg = new_transform.rotation;
+
         geom::Vector2D translation_vector = new_location - center;
         float rotation_angle = new_deg - rotation;
 
