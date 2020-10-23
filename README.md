@@ -2,13 +2,14 @@
 
 AVSIM will be a 2D-Simulation for short-term maneuver planning with automated vehicle systems.
 
-Currently, there is a (static) world containing agents, obstacles and the road. Geometric functionality like collision check for rectangular geometries with SAT and bounding boxes are also provided. \
-Everything can be exported as shared library to be accessible with python.
+Currently, the world is represented by a static road network and obstacles as well as dynamic agents. Collision checking for rectangular geometries with SAT is provided to validate the world state. Additionaly, rendering is possible with a set of debug colors. \
+Functionalities can be exported as shared library to be accessible with python (exports are finalized when c++ implementation is done).
 
 Next:
-- Visualization of the world (for general visualization and debugging)
-- Adding dynamics enabling agents to move (basic functionality including polynomial trajectory planning)
-- Building state spaces for agents
+- Building state spaces for agents to synchronize world state
+- Adding polynomial trajectory planning
+- Finalize the visualization of the world
+- Finalize python exports
 - Creating open ai gym environment
 - ...
 
