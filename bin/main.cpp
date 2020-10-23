@@ -7,13 +7,14 @@
 #include "road/Lane.hpp"
 #include "road/Road.hpp"
 #include "world/World.hpp"
+#include "utils/Renderer.hpp"
 #include "yaml-cpp/yaml.h"
 
 #include <filesystem>
 #include <iostream>
 #include <random>
 #include <chrono>
-#include "string.h"
+#include <string>
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -144,6 +145,25 @@ int main(int argc, char const *argv[])
 
     std::cout << std::endl << world << std::endl << std::endl;
 
+    std::cout << std::endl << "Rendering!" << std::endl << std::endl;
+
+    while(true)
+    {
+        // Update world state
+        world.tick(); // currently does nothing
+
+        // Render world
+        world.render();
+
+        // Move agents
+        std::vector<entity::Agent> &agents = world.get_agents();
+        for (auto &agent : agents)
+        {
+            geom::Vector2D location = agent.get_location();
+            location.x += geom::Math::sign(agent.get_desired_lane()) * 1.0;
+            agent.set_location(location);
+        }
+    }
 
     return 0;
 }
