@@ -43,6 +43,11 @@ struct Vector2D
         return Vector2D(x * n, y * n);
     }
 
+    Vector2D get_normal_vector() const
+    {
+        return Vector2D(-y, x);
+    }
+
     // ==================================================
     //  OPERATORS
     // ==================================================
