@@ -34,16 +34,8 @@ public:
     // ==================================================
 
     Road() = default;
-    Road(const std::string &config_file)
+    Road(const YAML::Node &config)
     {
-        std::filesystem::path path(config_file);
-        if (path.is_relative())
-        {
-            throw std::invalid_argument("Relative path is used. Use absolute path instead.");
-        }
-        YAML::Node config = YAML::LoadFile(path);
-        config = config["static"]["road"];
-
         length = config["length"].as<float>();
         speed_limit = config["speed_limit"].as<float>();
         
