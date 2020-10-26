@@ -6,7 +6,6 @@ Currently, the world is represented by a static road network and obstacles as we
 Functionalities can be exported as shared library to be accessible with python (exports are finalized when c++ implementation is done).
 
 Next:
-- Building state spaces for agents to synchronize world state
 - Adding polynomial trajectory planning
 - Finalize the visualization of the world
 - Finalize python exports
