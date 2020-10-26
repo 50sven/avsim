@@ -4,6 +4,7 @@
 #include "Math.hpp"
 #include "entity/Entity.hpp"
 #include "entity/Agent.hpp"
+#include "entity/AgentState.hpp"
 #include "entity/Obstacle.hpp"
 
 #include <iostream>
@@ -11,8 +12,6 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
-
-using vector_of_pairs = std::vector<std::pair<avs::entity::Entity, avs::entity::Entity>>;
 
 
 namespace avs {
@@ -75,20 +74,27 @@ public:
         BoundingBox bb_B = entity_B.get_bounding_box();
         bool is_intersecting = bb_A.intersects(bb_B);
         if (!is_intersecting)
-        {   
+        {
             return false;
         }
 
-        // Calculate projection axis
+        // Calculate projection axis (normals to each edge)
         // Only 4 are required, since two axis are always parallel
         Rectangle geometry_A = entity_A.get_geometry();
         Rectangle geometry_B = entity_B.get_geometry();
         std::array<Vector2D, 4> projection_axis;
         
+        // Make edges
         projection_axis[0] = geometry_A.front_left - geometry_A.front_right;
         projection_axis[1] = geometry_A.front_left - geometry_A.back_left;
         projection_axis[2] = geometry_B.front_left - geometry_B.front_right;
         projection_axis[3] = geometry_B.front_left - geometry_B.back_left;
+
+        // Make normals
+        projection_axis[0] = projection_axis[0].get_normal_vector();
+        projection_axis[1] = projection_axis[1].get_normal_vector();
+        projection_axis[2] = projection_axis[2].get_normal_vector();
+        projection_axis[3] = projection_axis[3].get_normal_vector();
 
         for (Vector2D const &axis : projection_axis)
         {   
@@ -101,10 +107,10 @@ public:
         return true;
     }
 
-    vector_of_pairs check_collisions(const std::vector<entity::Agent> &agents, const std::vector<entity::Obstacle> &obstacles)
+    bool check_collisions(std::vector<entity::Agent> &agents, const std::vector<entity::Obstacle> &obstacles)
     {
-        bool is_collided = false;
-        vector_of_pairs collisions;
+        bool collision = false;
+        bool is_collided;
         for (auto it_agent_A = agents.begin(); it_agent_A < agents.end(); it_agent_A++)
         {
             // Check collision with other agents
@@ -113,8 +119,11 @@ public:
                 is_collided = check_collision(*it_agent_A, *it_agent_B);
                 if (is_collided == true)
                 {
-                    std::pair<entity::Entity, entity::Entity> collision_pair(*it_agent_A, *it_agent_B);
-                    collisions.push_back(collision_pair);
+                    entity::AgentState &state = it_agent_A->get_state();
+                    state.collision = true;
+                    state.collision_objects.push_back(*it_agent_B);
+
+                    collision = true;
                 }
             }
 
@@ -124,13 +133,16 @@ public:
                 is_collided = check_collision(*it_agent_A, obstacle);
                 if (is_collided == true)
                 {
-                    std::pair<entity::Entity, entity::Entity> collision_pair(*it_agent_A, obstacle);
-                    collisions.push_back(collision_pair);
+                    entity::AgentState &state = it_agent_A->get_state();
+                    state.collision = true;
+                    state.collision_objects.push_back(obstacle);
+
+                    collision = true;
                 }
             }
         }
 
-        return collisions;
+        return collision;
     }
 
     // ==================================================

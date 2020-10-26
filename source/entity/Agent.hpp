@@ -1,13 +1,19 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "AgentState.hpp"
+
 #include "../geom/Vector2D.hpp"
 #include "../geom/Transform.hpp"
 #include "../geom/BoundingBox.hpp"
 #include "../geom/Geometry.hpp"
 #include "../geom/Math.hpp"
+#include "../road/Lane.hpp"
+#include "../road/Road.hpp"
 
 #include <string>
+#include <utility>
+#include <cmath>
 
 
 namespace avs {
@@ -17,8 +23,10 @@ class Agent : public Entity
 {
 private:
     inline static int counter = 1;
-    int desired_lane;
-    float desired_velocity;
+
+    road::Road *road_ptr = nullptr;
+
+    AgentState state;
 
     geom::Vector2D velocity;
     geom::Vector2D acceleration;
@@ -31,7 +39,8 @@ public:
     // ==================================================
 
     Agent() = default;
-    Agent(const geom::Transform &transform, const geom::Vector2D &size, const int &lane_desire=1, const float &velocity_desire=12.0f);
+    Agent(road::Road *road_ptr, const geom::Transform &transform, const geom::Vector2D &size, const int &lane_desire);
+    ~Agent();
 
     // ==================================================
     //  MEMBER VARIABLES
@@ -42,16 +51,22 @@ public:
     // ==================================================
     //  METHODS
     // ==================================================
+
+    void update();
+
+    AgentState &get_state();
+
+    geom::Vector2D get_location();
+
+    geom::Transform get_transform();
     
-    geom::Vector2D get_velocity() const;
+    geom::Vector2D get_velocity();
 
-    geom::Vector2D get_acceleration() const;
+    geom::Vector2D get_acceleration();
 
-    geom::Vector2D get_forward_vector() const;
+    geom::Vector2D get_forward_vector();
 
-    int get_desired_lane() const;
-
-    float get_desired_velocity() const;
+    std::pair<road::Lane, float> get_nearest_lane();
 
     void set_location(const geom::Vector2D &new_location);
 
