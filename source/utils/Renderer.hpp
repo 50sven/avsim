@@ -99,7 +99,8 @@ private:
             geom::Vector2D center = obstacle.get_location();
             sf::RectangleShape rectangle(sf::Vector2f(l, w));
             rectangle.setOrigin(l / 2, w / 2);
-            rectangle.setPosition((l / 2 + scale_x * (center.x + extend_x)), scale_y * (center.y));
+            rectangle.setPosition(scale_x * (center.x + extend_x),
+                                  scale_y * center.y);
             rectangle.setFillColor(sf::Color(0, 0, 0));
             background_texture.draw(rectangle);
         }
@@ -128,7 +129,7 @@ public:
     }
 
 
-    void draw(const std::vector<entity::Agent> &agents)
+    void draw(std::vector<entity::Agent> &agents)
     {
         window.clear(sf::Color::Black);
 
